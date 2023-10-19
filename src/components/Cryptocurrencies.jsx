@@ -1,14 +1,16 @@
 import { useQuery } from "react-query";
 import { getCoins } from "../services/api";
 import millify from "millify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const CryptoCard = ({rank, name, price, marketCap, url, change, uuid}) => {
 
   return (
-        <Link to={`cryptocurrencies/${uuid}`}>
-            <div className="shadow">
+        <Link to={`/cryptocurrencies/${uuid}`}>
+            <div className="hover:shadow-md bg-[#F5F7F8]">
                 <header className="flex justify-between items-center p-3 px-4 border-b font-heading     font-medium">
                     <h3>{rank}. {name}</h3>
                     <img 
@@ -28,13 +30,19 @@ const CryptoCard = ({rank, name, price, marketCap, url, change, uuid}) => {
 }
 
 const Cryptocurrencies = ({simplified}) => {
-    const [currentPage, setCurrentPage] = useState(0);
-    const cryptoPerPage = 15;
     const count = simplified ? "10" : "50";
     const {data: coins, isLoading, isError, error} = useQuery('cryptocurrencies', {
         queryFn: () => getCoins(count),
         refetchOnWindowFocus: false,
     })
+    const [cryptos, setCryptos] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        window.scrollTo(0,0)
+        const filteredData = coins?.data?.coins.filter(coin => coin?.name?.toLowerCase().includes(searchTerm?.toLowerCase()));
+        setCryptos(filteredData);
+    }, [coins, searchTerm])
 
     if(isLoading){
         return <h4>Loading Cyptocurrencies...</h4>
@@ -44,45 +52,29 @@ const Cryptocurrencies = ({simplified}) => {
         return <h4>Error: {error.message}</h4>
     }
 
-    const pageCount = Math.ceil(count / cryptoPerPage);
-    const cryptos = simplified ? coins?.data.coins : coins?.data.coins.slice(currentPage * cryptoPerPage, cryptoPerPage * (currentPage + 1));
-    // console.log(cryptos);
-    console.log(pageCount)
-
-    function handleNext(){
-        setCurrentPage(prev => prev + 1)
-    }
-
-    function handlePrev(){
-        setCurrentPage(prev => prev - 1)
-    }
-
 
     return (
         <div className="w-full flex flex-col gap-5">
+            {!simplified && <div className="w-full max-w-[260px] mx-auto flex flex-row-reverse items-center bg-[#F5F7F8] shadow-sm rounded overflow-hidden">
+                <input 
+                onChange={(e) => setSearchTerm(e.target.value)}
+                type="text" 
+                className="w-full py-[6px] px-[10px] bg-transparent outline-none"
+                />
+                <FontAwesomeIcon 
+                icon={faMagnifyingGlass} 
+                className="p-1 px-2"
+                />
+            </div>}
             <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 ">
                 {
-                    cryptos.map((coin) => {
+                    cryptos?.map((coin) => {
                         return (
                             <CryptoCard key={coin.uuid} uuid={coin.uuid} rank={coin.rank} name={coin.name} price={coin.price} marketCap={coin.marketCap} url={coin.iconUrl} change={coin.change} />
                         )
                     })
                 }
             </div>
-            {!simplified && (
-                <div className=" self-end inline-flex gap-2">
-                    <button 
-                    disabled={currentPage == 0}
-                    onClick={handlePrev}
-                    className="p-2 px-4 border-2 border-primary disabled:border-grayish/[0.7] disabled:bg-grayish/[0.7]"
-                    >Prev</button>
-                    <button 
-                    disabled={currentPage + 1 == pageCount}
-                    onClick={handleNext}
-                    className="p-2 px-4 border-2 border-primary disabled:border-grayish/[0.7] disabled:bg-grayish/[0.7]"
-                    >Next</button>
-                </div>
-            )}
         </div>
     )
 }

@@ -12,6 +12,7 @@ import Layout from "./components/layout"
 import Home from "./pages/home";
 import Cryptos from "./pages/Cryptos";
 import CryptoNews from "./pages/CryptoNews";
+import CryptoDetails from "./components/CryptoDetails";
 
 const queryClient = new QueryClient()
 

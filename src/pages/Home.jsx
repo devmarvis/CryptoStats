@@ -4,6 +4,7 @@ import millify from "millify";
 import { Link } from "react-router-dom";
 import Cryptocurrencies from "../components/Cryptocurrencies";
 import News from "../components/News";
+import { useEffect } from "react";
 
 
 const Home = () => {
@@ -12,6 +13,10 @@ const Home = () => {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
     });
+
+    useEffect(() => {
+      window.scrollTo(0,0)
+  }, [])
 
     if(isLoading){
         return <h1>Loading Stats...</h1>

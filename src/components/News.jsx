@@ -1,12 +1,12 @@
 import { useQuery, } from "react-query"
 import { getNews } from "../services/api"
 import moment from "moment/moment"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 const NewsCard = ({name, url, image, description, provider, datePublished}) => {
     return (
-        <div className="p-5 h-[280px] shadow">
+        <div className="p-5 h-[280px] hover:shadow-md bg-[#F5F7F8]">
             <a href={url} target="_blank">
                 <header className="flex justify-between gap-1 items-start mb-[6px]">
                     <h4 className="font-heading font-medium line-clamp-3">{name}</h4>
@@ -42,6 +42,10 @@ const News = ({simplified}) => {
         refetchOnWindowFocus: false,
     })
 
+    useEffect(() => {
+        window.scrollTo(0,0)
+    }, [])
+
     if(isLoading){
         return <h4>Loading Cyptocurrencies...</h4>
     }
@@ -51,7 +55,7 @@ const News = ({simplified}) => {
     }
 
     const cryptoNews = simplified ? news?.data.value : news?.data.value.slice(currentPage * newsPerPage, newsPerPage * (currentPage + 1));
-    const pageCount = Math.ceil(count / newsPerPage);
+    const pageCount = Math.ceil(news?.data?.value.length / newsPerPage);
     // console.log(cryptoNews)
 
     function handleNext(){
