@@ -1,16 +1,17 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom"
-import { getCoin } from "../services/api";
+import { getCoin, getCoinHistory } from "../services/api";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate, faBolt, faChartLine, faCircleExclamation, faDollar, faHashtag, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import millify from "millify";
 import HTMLReactParser from "html-react-parser";
+import LineChart from "./LineChart";
 
 const CryptoDetails = () => {
   const [timePeriod, setTimePeriod] = useState("7d");
   const { uuid } = useParams();
-  console.log(uuid);
+  // console.log(uuid);
 
   const {data: coin, isLoading, isError, error } = useQuery(['coin', uuid], {
     queryFn: () => getCoin(uuid),
@@ -18,13 +19,13 @@ const CryptoDetails = () => {
     refetchOnMount: true,
   })
 
-  const { data: coinHistory, } = useQuery(['coin', timePeriod], {
-    queryFn: () => getCoin(uuid, timePeriod),
+  const { data: coinHistory, isFetching} = useQuery(['coin', timePeriod], {
+    queryFn: () => getCoinHistory(uuid, timePeriod),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   })
 
-  console.log(coinHistory)
+  if(isFetching) return <h2>Loading...</h2>
 
   if(isLoading){
     return <h2>Loading...</h2>
@@ -34,7 +35,8 @@ const CryptoDetails = () => {
   }
 
   const coinDetails = coin?.data?.data?.coin;
-  console.log(coinDetails);
+  // console.log(coinDetails);
+  console.log(coinHistory);
 
   const time = ['3h', '24h', '7d', '30d', '3m', '1y']
 
@@ -70,7 +72,7 @@ const CryptoDetails = () => {
           ))
         }
       </select>
-      {/**Line chart should go in here */}
+      <LineChart coinHistory={coinHistory} currentPrice={coinDetails?.price} coinName={coinDetails?.name} />
       <div className="mt-7">
         <div className="flex justify-center gap-10 md:gap-14 flex-wrap mt-7">
           <div className="text-left">
@@ -112,8 +114,8 @@ const CryptoDetails = () => {
           <h3 className=" text-lg font-heading text-primary font-semibold mb-2">{coinDetails?.name} Links</h3>
           <div>
             {
-              coinDetails?.links.map(link => (
-                <div key={link.name} className="w-full max-w-md flex justify-between p-4 border-b border-b-gray-300 hover:bg-[#F5F7F8] gap-4 cursor-default">
+              coinDetails?.links.map((link, idx) => (
+                <div key={idx} className="w-full max-w-md flex justify-between p-4 border-b border-b-gray-300 hover:bg-[#F5F7F8] gap-4 cursor-default">
                   <span className=" font-medium">{link.type}</span>
                   <span className=" text-primary font-bold"><a href={link.url} target="_blank" rel="noreferrer">{link.name}</a></span>
                 </div>

@@ -57,7 +57,7 @@ export const getCoin = async(id) => {
 
 export const getCoinHistory = async(id, timePeriod) => {
     try {
-        const res = await axios.get(`https://coinranking1.p.rapidapi.com/coin/${id}/history/${timePeriod}`, {
+        const res = await axios.get(`https://coinranking1.p.rapidapi.com/coin/${id}/history?timePeriod=${timePeriod}`, {
             headers: coinHeaders,
         })
         return res;
@@ -65,5 +65,10 @@ export const getCoinHistory = async(id, timePeriod) => {
         console.log(error.message)
     }
 }
+
+
+
+
+
 
 
