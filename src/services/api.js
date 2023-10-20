@@ -43,4 +43,15 @@ export const getNews = async (count) => {
     }
 }
 
+export const getCoin = async(id) => {
+    try {
+        const res = await axios.get(`https://coinranking1.p.rapidapi.com/coin/${id}`, {
+            headers: coinHeaders,
+        })
+        return res;
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 
