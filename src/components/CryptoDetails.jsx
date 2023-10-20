@@ -16,16 +16,13 @@ const CryptoDetails = () => {
   const {data: coin, isLoading, isError, error } = useQuery(['coin', uuid], {
     queryFn: () => getCoin(uuid),
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
   })
 
   const { data: coinHistory, isFetching} = useQuery(['coin', timePeriod], {
     queryFn: () => getCoinHistory(uuid, timePeriod),
     refetchOnWindowFocus: false,
-    refetchOnMount: true,
   })
 
-  if(isFetching) return <h2>Loading...</h2>
 
   if(isLoading){
     return <h2>Loading...</h2>
@@ -36,7 +33,7 @@ const CryptoDetails = () => {
 
   const coinDetails = coin?.data?.data?.coin;
   // console.log(coinDetails);
-  console.log(coinHistory);
+  // console.log(coinHistory);
 
   const time = ['3h', '24h', '7d', '30d', '3m', '1y']
 
@@ -65,10 +62,10 @@ const CryptoDetails = () => {
       id="time-period" 
       value={timePeriod}
       onChange={(e) => setTimePeriod(e.target.value)}
-      className="mt-7 p-2 px-3 font-sans bg-[#F5F7F8]">
+      className="mt-7 mb-1 p-2 px-3 font-sans bg-[#F5F7F8]">
         {
           time.map(tm => (
-            <option value={tm}>{tm}</option>
+            <option key={tm} value={tm}>{tm}</option>
           ))
         }
       </select>
