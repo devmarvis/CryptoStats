@@ -3,19 +3,28 @@ import { useParams } from "react-router-dom"
 import { getCoin } from "../services/api";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBolt, faDollar, faHashtag, faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faBolt, faChartLine, faCircleExclamation, faDollar, faHashtag, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import millify from "millify";
+import HTMLReactParser from "html-react-parser";
 
 const CryptoDetails = () => {
-  const [timePeriod, setTimePeriod] = useState("");
+  const [timePeriod, setTimePeriod] = useState("7d");
   const { uuid } = useParams();
   console.log(uuid);
 
-  const {data: coin, isFetching, isLoading, isError, error } = useQuery(['coin', uuid], {
+  const {data: coin, isLoading, isError, error } = useQuery(['coin', uuid], {
     queryFn: () => getCoin(uuid),
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   })
+
+  const { data: coinHistory, } = useQuery(['coin', timePeriod], {
+    queryFn: () => getCoin(uuid, timePeriod),
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+  })
+
+  console.log(coinHistory)
 
   if(isLoading){
     return <h2>Loading...</h2>
@@ -37,6 +46,14 @@ const CryptoDetails = () => {
     {title: "All-time-high(daily avg.)", icon: <FontAwesomeIcon icon={faTrophy} />, value: `$ ${millify(coinDetails?.allTimeHigh.price)}`},
   ]
 
+  const genericStats = [
+    {title: "Number of Markets", icon: <FontAwesomeIcon icon={faChartLine} />, value: coinDetails?.numberOfMarkets },
+    {title: "Number of Exchanges", icon: <FontAwesomeIcon icon={faArrowsRotate} />, value: coinDetails?.numberOfExchanges },
+    {title: "Approved Supply", icon: <FontAwesomeIcon icon={faCircleExclamation} />, value: millify(coinDetails?.supply?.supplyAt) },
+    {title: "Total Supply", icon: <FontAwesomeIcon icon={faCircleExclamation} />, value: `$ ${millify(coinDetails?.supply?.total)}`},
+    {title: "Circulating Supply", icon: <FontAwesomeIcon icon={faCircleExclamation} />, value: `$ ${millify(coinDetails?.supply?.circulating)}`}
+  ]
+
   return (
     <section className="w-full font-text">
       <h3 className=" font-heading text-[22px] font-bold text-primary mb-3 text-center ">{coinDetails.name} Price</h3>
@@ -44,7 +61,6 @@ const CryptoDetails = () => {
       <select 
       name="time-period" 
       id="time-period" 
-      defaultValue="7d" 
       value={timePeriod}
       onChange={(e) => setTimePeriod(e.target.value)}
       className="mt-7 p-2 px-3 font-sans bg-[#F5F7F8]">
@@ -55,20 +71,45 @@ const CryptoDetails = () => {
         }
       </select>
       {/**Line chart should go in here */}
-      <div className="text-center mt-7">
-        <h4 className=" font-heading text-lg font-semibold">{coinDetails.name} value statistics</h4>
-        <p>An overview showing the stats of {coinDetails.name}</p>
-        <div className="max-w-[336px] mx-auto text-left mt-3">
-          {
-            stats.map(stat => (
-              <div className="p-4 flex justify-between border-b border-b-gray-300 hover:bg-[#F5F7F8] cursor-default">
-                <div>{stat.icon} <span className="ml-1 text-gray-900">{stat.title}</span></div>
-                <p className=" font-semibold">{stat?.value}</p>
-              </div>
-            ))
-          }
+      <div className="mt-7">
+        <div className="flex justify-center gap-10 md:gap-14 flex-wrap mt-7">
+          <div className="text-left">
+            <h4 className=" font-heading text-lg font-semibold">{coinDetails.name} value statistics</h4>
+            <p className="text-[15px]">An overview showing the stats of {coinDetails.name}</p>
+            <div className="max-w-[340px] mx-auto">
+              {
+                stats.map(stat => (
+                  <div className="p-4 flex justify-between gap-3 border-b border-b-gray-300 hover:bg-   [#F5F7F8] cursor-default mt-3">
+                    <div>{stat.icon} <span className="ml-1 text-gray-900">{stat.title}</span></div>
+                    <p className=" font-semibold">{stat?.value}</p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+          <div className="text-left">
+            <h4 className=" font-heading text-lg font-semibold">Other statistics</h4>
+            <p className="text-[15px]">An overview showing the stats of all cryptocurrencies</p>
+            <div className="max-w-[340px] mx-auto">
+              {
+                genericStats.map(stat => (
+                  <div className="p-4 flex justify-between gap-3 border-b border-b-gray-300 hover:bg-   [#F5F7F8] cursor-default">
+                    <div>{stat?.icon} <span className="ml-1 text-gray-900">{stat.title}</span></div>
+                    <p className=" font-semibold">{stat?.value}</p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
         </div>
       </div>
+      <article className="text-left my-8">
+        <h3 className=" text-lg font-heading text-primary font-semibold mb-2">What is {coinDetails?.name}</h3>
+        <p>{HTMLReactParser(coinDetails?.description)}</p>
+      </article>
+      <article>
+        <h3 className=" text-lg font-heading text-primary font-semibold mb-2">{coinDetails?.name} Links</h3>
+      </article>
     </section>
   )
 }
