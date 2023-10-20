@@ -35,15 +35,15 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-7">{/**Stats */}
         <article>
           <h4 className=" text-grayish mb-[2px]">Total Crytocurrencies</h4>
-          <p>{millify(stats.totalCoins)}</p>
+          <p>{millify(stats?.totalCoins)}</p>
         </article>
         <article>
           <h4 className=" text-grayish mb-[2px]">Total Exchanges</h4>
-          <p>{millify(stats.totalExchanges)}</p>
+          <p>{millify(stats?.totalExchanges)}</p>
         </article>
         <article>
           <h4 className=" text-grayish mb-[2px]">Total Market Cap</h4>
-          <p>${millify(stats.totalMarketCap)}</p>
+          <p>${millify(stats?.totalMarketCap)}</p>
         </article>
         <article>
           <h4 className=" text-grayish mb-[2px]">Total 24h Volume</h4>
@@ -51,7 +51,7 @@ const Home = () => {
         </article>
         <article>
           <h4 className=" text-grayish mb-[2px]">Total Markets</h4>
-          <p>{millify(stats.totalMarkets)}</p>
+          <p>{millify(stats?.totalMarkets)}</p>
         </article>
       </div>
       <header className="w-full flex justify-between font-heading font-medium mb-4">

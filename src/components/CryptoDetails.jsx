@@ -76,10 +76,10 @@ const CryptoDetails = () => {
           <div className="text-left">
             <h4 className=" font-heading text-lg font-semibold">{coinDetails.name} value statistics</h4>
             <p className="text-[15px]">An overview showing the stats of {coinDetails.name}</p>
-            <div className="max-w-[340px] mx-auto">
+            <div className="w-full max-w-[340px] mx-auto">
               {
                 stats.map(stat => (
-                  <div className="p-4 flex justify-between gap-3 border-b border-b-gray-300 hover:bg-   [#F5F7F8] cursor-default mt-3">
+                  <div className="p-4 flex justify-between gap-3 border-b border-b-gray-300 hover:bg-[#F5F7F8] cursor-default mt-3">
                     <div>{stat.icon} <span className="ml-1 text-gray-900">{stat.title}</span></div>
                     <p className=" font-semibold">{stat?.value}</p>
                   </div>
@@ -90,10 +90,10 @@ const CryptoDetails = () => {
           <div className="text-left">
             <h4 className=" font-heading text-lg font-semibold">Other statistics</h4>
             <p className="text-[15px]">An overview showing the stats of all cryptocurrencies</p>
-            <div className="max-w-[340px] mx-auto">
+            <div className="w-full max-w-[340px] mx-auto">
               {
                 genericStats.map(stat => (
-                  <div className="p-4 flex justify-between gap-3 border-b border-b-gray-300 hover:bg-   [#F5F7F8] cursor-default">
+                  <div className="p-4 flex justify-between gap-3 border-b border-b-gray-300 hover:bg-[#F5F7F8] cursor-default mt-3">
                     <div>{stat?.icon} <span className="ml-1 text-gray-900">{stat.title}</span></div>
                     <p className=" font-semibold">{stat?.value}</p>
                   </div>
@@ -103,13 +103,25 @@ const CryptoDetails = () => {
           </div>
         </div>
       </div>
-      <article className="text-left my-8">
-        <h3 className=" text-lg font-heading text-primary font-semibold mb-2">What is {coinDetails?.name}</h3>
-        <p>{HTMLReactParser(coinDetails?.description)}</p>
-      </article>
-      <article>
-        <h3 className=" text-lg font-heading text-primary font-semibold mb-2">{coinDetails?.name} Links</h3>
-      </article>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-7 items-start mt-10">
+        <article className="text-left">
+          <h3 className=" text-lg font-heading text-primary font-semibold mb-2">What is {coinDetails?.name}</h3>
+          <p className="text-primary font-medium">{HTMLReactParser(coinDetails?.description)}</p>
+       </article>
+        <article>
+          <h3 className=" text-lg font-heading text-primary font-semibold mb-2">{coinDetails?.name} Links</h3>
+          <div>
+            {
+              coinDetails?.links.map(link => (
+                <div key={link.name} className="w-full max-w-md flex justify-between p-4 border-b border-b-gray-300 hover:bg-[#F5F7F8] gap-4 cursor-default">
+                  <span className=" font-medium">{link.type}</span>
+                  <span className=" text-primary font-bold"><a href={link.url} target="_blank" rel="noreferrer">{link.name}</a></span>
+                </div>
+              ))
+            }
+          </div>
+        </article>
+      </div>
     </section>
   )
 }
