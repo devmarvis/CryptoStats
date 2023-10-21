@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import Skeleton from "./Skeleton";
 
 const CryptoCard = ({rank, name, price, marketCap, url, change, uuid}) => {
 
@@ -45,7 +46,15 @@ const Cryptocurrencies = ({simplified}) => {
     }, [coins, searchTerm])
 
     if(isLoading){
-        return <h4>Loading Cyptocurrencies...</h4>
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 ">
+                {
+                 Array.from({length: 10}, (_, i) => i + 1).map(idx => (
+                        <Skeleton key={idx} />
+                    ))
+                }
+            </div>
+        )
     }
 
     if(isError){

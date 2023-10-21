@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Cryptocurrencies from "../components/Cryptocurrencies";
 import News from "../components/News";
 import { useEffect } from "react";
+import { Spin } from "antd";
 
 
 const Home = () => {
@@ -19,7 +20,7 @@ const Home = () => {
   }, [])
 
     if(isLoading){
-        return <h1>Loading Stats...</h1>
+        return <h1><Spin /></h1>
     }
 
     if(isError){

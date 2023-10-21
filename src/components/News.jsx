@@ -2,6 +2,7 @@ import { useQuery, } from "react-query"
 import { getNews } from "../services/api"
 import moment from "moment/moment"
 import { useEffect, useState } from "react"
+import Skeleton from "./Skeleton"
 
 
 const NewsCard = ({name, url, image, description, provider, datePublished}) => {
@@ -47,7 +48,15 @@ const News = ({simplified}) => {
     }, [])
 
     if(isLoading){
-        return <h4>Loading Cyptocurrencies...</h4>
+        return (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {
+                    Array.from({length: 10}, (_, i) => i + 1).map(idx => (
+                        <Skeleton key={idx} />
+                    ))
+                }
+            </div>
+        )
     }
 
     if(isError){

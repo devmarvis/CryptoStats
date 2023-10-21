@@ -41,15 +41,15 @@ const LineChart = ({ coinHistory, currentPrice, coinName }) => {
   return (
     <>
     <div>
-      <header className="flex justify-between">
-        <h3 className=" font-heading text-[20px] text-primary font-semibold">{coinName} Price Chart</h3>
-        <div className="flex gap-4 text-sm font-bold">
+      <header className="flex justify-between my-2">
+        <h3 className=" font-heading md:text-[20px] text-primary font-semibold">{coinName} Price Chart</h3>
+        <div className="flex flex-col md:flex-row items-end gap-2 md:gap-4 text-sm font-bold">
           <span>{coinHistory?.data?.data?.change}%</span>
-          <span>Current {coinName} Price: $ {millify(currentPrice)}</span>
+          <span className="text-right">Current {coinName} Price: $ {millify(currentPrice)}</span>
         </div>
       </header>
     </div>
-    <Line data={data} options={options} />
+      <Line data={data} options={options} />
     </>
   )
 }

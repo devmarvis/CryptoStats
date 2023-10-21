@@ -7,6 +7,7 @@ import { faArrowsRotate, faBolt, faChartLine, faCircleExclamation, faDollar, faH
 import millify from "millify";
 import HTMLReactParser from "html-react-parser";
 import LineChart from "./LineChart";
+import { Spin } from "antd";
 
 const CryptoDetails = () => {
   const [timePeriod, setTimePeriod] = useState("7d");
@@ -25,7 +26,9 @@ const CryptoDetails = () => {
 
 
   if(isLoading){
-    return <h2>Loading...</h2>
+    return <div className="w-full h-[80vh] flex justify-center items-center">
+      <Spin size="large" />
+    </div>
   }
   if(isError){
     return <h2>Error: {error.message}</h2>
@@ -86,7 +89,7 @@ const CryptoDetails = () => {
               }
             </div>
           </div>
-          <div className="text-left">
+          <div className="text-center md:text-left">
             <h4 className=" font-heading text-lg font-semibold">Other statistics</h4>
             <p className="text-[15px]">An overview showing the stats of all cryptocurrencies</p>
             <div className="w-full max-w-[340px] mx-auto">
@@ -104,11 +107,11 @@ const CryptoDetails = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7 items-start mt-10">
         <article className="text-left">
-          <h3 className=" text-lg font-heading text-primary font-semibold mb-2">What is {coinDetails?.name}</h3>
+          <h3 className=" text-lg font-heading text-primary font-bold mb-2">What is {coinDetails?.name}</h3>
           <p className="text-primary font-medium">{HTMLReactParser(coinDetails?.description)}</p>
        </article>
         <article>
-          <h3 className=" text-lg font-heading text-primary font-semibold mb-2">{coinDetails?.name} Links</h3>
+          <h3 className=" text-xl font-heading font-semibold mb-2">{coinDetails?.name} Links</h3>
           <div>
             {
               coinDetails?.links.map((link, idx) => (
