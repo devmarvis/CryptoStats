@@ -6,6 +6,7 @@ import Cryptocurrencies from "../components/Cryptocurrencies";
 import News from "../components/News";
 import { useEffect } from "react";
 import { Spin } from "antd";
+import Footer from "../components/Footer";
 
 
 const Home = () => {
@@ -17,7 +18,7 @@ const Home = () => {
 
     useEffect(() => {
       window.scrollTo(0,0)
-  }, [])
+  }, []);
 
     if(isLoading){
         return <h1><Spin /></h1>
@@ -31,7 +32,8 @@ const Home = () => {
 
 
   return (
-    <section className="w-full">
+    <>
+    <section className="w-full pt-3 md:pt-10 p-10 px-6 md:px-10">
       <h3 className="font-heading text-xl font-medium mb-4">Global Crypto Stats</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-7">{/**Stats */}
         <article>
@@ -70,6 +72,8 @@ const Home = () => {
       </header>
       <News simplified />
     </section>
+    <Footer />
+    </>
   )
 }
 export default Home;

@@ -1,17 +1,20 @@
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom"
+import { Link, useLocation, useParams } from "react-router-dom"
 import { getCoin, getCoinHistory } from "../services/api";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faBolt, faChartLine, faCircleExclamation, faDollar, faHashtag, faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faBolt, faChartLine, faChevronLeft, faCircleExclamation, faDollar, faHashtag, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import millify from "millify";
 import HTMLReactParser from "html-react-parser";
 import LineChart from "./LineChart";
 import { Spin } from "antd";
+import Footer from "./Footer";
 
 const CryptoDetails = () => {
   const [timePeriod, setTimePeriod] = useState("7d");
   const { uuid } = useParams();
+  const location = useLocation();
+  console.log(location)
   // console.log(uuid);
 
   const {data: coin, isLoading, isError, error } = useQuery(['coin', uuid], {
@@ -57,7 +60,11 @@ const CryptoDetails = () => {
   ]
 
   return (
-    <section className="w-full font-text">
+    <>
+    <section className="w-full min-h-screen pt-3 md:pt-10 p-10 px-6 md:px-10 font-text">
+      <Link to=".." className="mb-4 text-[20px] p-2 inline-block">
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </Link>
       <h3 className=" font-heading text-[22px] font-bold text-primary mb-3 text-center ">{coinDetails.name} Price</h3>
       <p className="text-center ">{coinDetails.name} live price is US dollar. View value statistics, market cap and supply.</p>
       <select 
@@ -125,6 +132,8 @@ const CryptoDetails = () => {
         </article>
       </div>
     </section>
+    <Footer />
+    </>
   )
 }
 export default CryptoDetails
