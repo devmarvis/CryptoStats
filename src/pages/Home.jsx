@@ -21,7 +21,9 @@ const Home = () => {
   }, []);
 
     if(isLoading){
-        return <h1><Spin /></h1>
+        return <div className="w-full pt-3 md:pt-10 p-10 px-6 md:px-10">
+          <Spin />
+        </div>
     }
 
     if(isError){
